@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/planck-js/0.3.0-rc.2/planck.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/poly-decomp@0.2.1/build/decomp.min.js"></script>
+<style>
+body, html {
+  margin: 0
+}
+canvas {
+  border-radius: 50px;
+}
+</style>
+</head>
+<body>
+<canvas></canvas>
+<script src="system.js"></script>
+<script src="create.js"></script>
+<script>
+const room = document.querySelector('canvas').getContext('2d');
+room.height = room.canvas.height = window.innerHeight / 1.1;
+room.width = room.canvas.width = Math.floor(room.height / 19 * 9);
+room.lineCap = 'round';
+room.shadowBlur = 20;
+room.font = 'bold 32px Courier';
+room.textAlign = 'center';
+
+const world = new Pixie(planck.Vec2(0, 0));
+world.score = [2, 1];
+let objects = [];
+let keys = new Map();
+createTable();
+createPaddles();
+
+(room.loop = () => {
+  room.fillStyle = '#222f3e';
+  room.beginPath();
+  room.fillRect(0, 0, room.canvas.width, room.canvas.height);
+  drawTable();
+  world.step(1 / 60);
+  for (let object of objects) {
+    if (object.step) {object.step(); }
+    object.draw();
+  }
+  requestAnimationFrame(room.loop);
+})();
+
+document.onkeydown = e => keys.set(e.keyCode, true);
+document.onkeyup = e => keys.set(e.keyCode, false);
+</script>
+</body>
+</html>
