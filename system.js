@@ -134,7 +134,15 @@ class CircleWall {
 
 class Paddle {
   constructor(x, y, color, keypads) {
-    this.body = world.createDynamicBody(Pixie.vec(x, y));
+    this.body = world.createDynamicBody({
+      position: Pixie.vec(x, y),
+      linearDamping: 10
+    });
+    this.body.setMassData({
+      mass: 50,
+      center: planck.Vec2(0, 0),
+      I: 0
+    });
     this.radius = room.width * 0.1;
     Pixie.addCircle(this.body, this.radius);
     this.color = color;
@@ -142,16 +150,16 @@ class Paddle {
   }
   step() {
     if (keys.get(this.keypads[0])) {
-      this.body.applyForceToCenter(Pixie.vec(-500, 0), true);
+      this.body.applyForceToCenter(Pixie.vec(-5000, 0), true);
     }
     if (keys.get(this.keypads[1])) {
-      this.body.applyForceToCenter(Pixie.vec(0, -500), true);
+      this.body.applyForceToCenter(Pixie.vec(0, -5000), true);
     }
     if (keys.get(this.keypads[2])) {
-      this.body.applyForceToCenter(Pixie.vec(500, 0), true);
+      this.body.applyForceToCenter(Pixie.vec(5000, 0), true);
     }
     if (keys.get(this.keypads[3])) {
-      this.body.applyForceToCenter(Pixie.vec(0, 500), true);
+      this.body.applyForceToCenter(Pixie.vec(0, 5000), true);
     }
   }
   draw() {
